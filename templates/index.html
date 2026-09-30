@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block title %}Home{% endblock %}{% block body %}
+<header class="hero">
+<svg class="topo" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<path d="M-50 500C200 420 300 520 520 430S850 300 1250 380"/><path d="M-50 450C220 360 330 470 540 380S860 240 1250 320"/>
+<path d="M-50 400C240 300 360 420 560 330S870 190 1250 260"/><path d="M-50 350C260 240 390 370 580 280S880 140 1250 200"/>
+<path d="M-50 300C280 180 420 320 600 230S890 90 1250 140"/><path d="M-50 250C300 130 450 270 620 180S900 40 1250 80"/>
+<path d="M-50 550C180 490 280 580 500 490S840 370 1250 440"/></svg>
+<div class="wrap"><h1><span class="reveal-line"><span>AI-Based Early Warning</span></span>
+<span class="reveal-line"><span>and Landslide Risk</span></span><span class="reveal-line"><span>Monitoring System</span></span></h1>
+<p class="lead">Enter seven readings from a slope. A Random Forest model returns the landslide probability, a four-level risk rating, an on-screen alarm and a Telegram alert.</p>
+<div class="cta"><a class="btn" href="/predict">Check slope risk</a><a class="btn ghost" href="/dashboard">Open dashboard</a></div></div></header>
+<div class="strip"><div><b data-n="7">0</b><span>Sensor and terrain inputs</span></div><div><b data-n="4">0</b><span>Risk levels</span></div>
+<div><b>Telegram</b><span>Instant alerts</span></div><div><b>Siren</b><span>Loud alarm for High and Critical</span></div></div>
+<section class="blk"><div class="wrap"><h2>From readings to a warning in seconds</h2>
+<p class="muted">The rating depends on the predicted probability of a landslide.</p>
+<div class="levels"><i style="background:var(--low)"></i><i style="background:var(--medium)"></i><i style="background:var(--high)"></i><i style="background:var(--critical)"></i></div>
+<div class="legend"><span>Low</span><span>Medium</span><span>High</span><span>Critical</span></div>
+<div class="grid"><div class="card"><h3>Predict</h3><p class="muted">Rainfall, soil moisture, slope angle, ground movement, temperature, groundwater and landslide history feed the model.</p></div>
+<div class="card"><h3>Alert</h3><p class="muted">Low and Medium play a short beep. High and Critical trigger a loud siren and a Telegram message.</p></div>
+<div class="card"><h3>Review</h3><p class="muted">Every check is logged. The dashboard shows trends, risk distribution and model accuracy.</p></div></div></div></section>
+<script>document.querySelectorAll('[data-n]').forEach(e=>{const n=+e.dataset.n;let i=0;const t=setInterval(()=>{e.textContent=++i;if(i>=n)clearInterval(t)},140)})</script>
+{% endblock %}

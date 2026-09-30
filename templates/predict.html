@@ -1,0 +1,35 @@
+{% extends "base.html" %}{% block title %}Check risk{% endblock %}{% block body %}
+<div class="wrap"><div class="page-h"><h1>Check slope risk</h1></div>
+<div class="split"><form id="f" class="card" enctype="multipart/form-data">
+<label>Location / site name</label><input name="location" value="Vellore, Tamil Nadu" required>
+<div class="two"><div><label>Rainfall intensity (mm)</label><input type="number" name="Rainfall_Intensity_mm" value="120" min="0" max="1000" step="1" required></div>
+<div><label>Soil moisture (%)</label><input type="number" name="Soil_Moisture_percent" value="60" min="0" max="100" step="1" required></div>
+<div><label>Slope angle (°)</label><input type="number" name="Slope_Angle_degree" value="35" min="0" max="90" step="1" required></div>
+<div><label>Ground movement (mm/day)</label><input type="number" name="Ground_Movement_mm_per_day" value="5" min="0" max="500" step="0.5" required></div>
+<div><label>Temperature (°C)</label><input type="number" name="Temperature_C" value="28" min="-20" max="60" step="0.5" required></div>
+<div><label>Groundwater level (m)</label><input type="number" name="Groundwater_Level_m" value="8" min="0" max="100" step="0.5" required></div></div>
+<label>Historical landslide at site?</label><select name="Historical_Landslide"><option value="0">No</option><option value="1">Yes</option></select>
+<label>Site photo (optional, saved as a record)</label>
+<label class="drop" for="img" id="dz">Choose a slope photo (JPG or PNG)</label><input id="img" type="file" name="image" accept="image/*" hidden>
+<label style="display:flex;gap:10px;align-items:center"><input type="checkbox" id="tg" checked style="width:auto">Send Telegram alert</label>
+<label style="display:flex;gap:10px;align-items:center"><input type="checkbox" id="al" checked style="width:auto">Play alarm sound</label>
+<button class="btn" style="width:100%;margin-top:18px" id="go">Detect landslide risk</button></form>
+<div class="card" id="out"><svg class="gauge" viewBox="0 0 200 120"><path d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="var(--line)" stroke-width="16" stroke-linecap="round"/>
+<path id="arc" class="arc" d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="var(--mute)" stroke-width="16" stroke-linecap="round" stroke-dasharray="252" stroke-dashoffset="252"/>
+<text id="pct" x="100" y="96" text-anchor="middle" font-family="Fraunces" font-size="34" fill="currentColor">--%</text></svg>
+<div class="badge" id="badge" style="background:var(--line);color:var(--mute)">Awaiting readings</div><div id="msg"></div><audio id="aud"></audio></div></div></div>
+<script>
+const $=id=>document.getElementById(id),C={Low:'#5bbf8a',Medium:'#c9a91f',High:'#e67e3c',Critical:'#e5484d'};
+$('img').onchange=e=>{const f=e.target.files[0];if(f)$('dz').innerHTML='<img src="'+URL.createObjectURL(f)+'" alt="Selected site">'};
+$('f').onsubmit=async e=>{e.preventDefault();const b=$('go');b.textContent='Analyzing...';b.disabled=true;
+const d=new FormData($('f'));d.set('telegram',$('tg').checked?'1':'0');
+try{const r=await fetch('/api/predict',{method:'POST',body:d}),j=await r.json();
+if(!r.ok){$('msg').innerHTML='<div class="note">'+j.error+'</div>';return}
+const p=j.probability*100;$('arc').style.strokeDashoffset=252*(1-j.probability);$('arc').style.stroke=C[j.level];
+let n=0;const t=setInterval(()=>{n=Math.min(p,n+p/40);$('pct').textContent=n.toFixed(1)+'%';if(n>=p)clearInterval(t)},30);
+const bd=$('badge');bd.textContent='Risk level: '+j.level;bd.style.background=C[j.level];bd.style.color='#fff';bd.className='badge'+(j.loud?' pulse':'');
+$('msg').innerHTML=(j.telegram==='Skipped'?'':'<div class="note">✈️ '+j.telegram_msg+'</div>')+
+'<div class="note">'+(j.loud?'🚨 Loud alarm active. High or Critical landslide risk.':'🔔 Normal alert. Low or Medium risk.')+'</div>';
+if($('al').checked){const a=$('aud');a.src='/alarm/'+(j.loud?'loud':'soft')+'.wav';a.play().catch(()=>{})}
+}finally{b.textContent='Detect landslide risk';b.disabled=false}};
+</script>{% endblock %}

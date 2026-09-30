@@ -1,0 +1,26 @@
+{% extends "base.html" %}{% block title %}Dashboard{% endblock %}{% block body %}
+<div class="wrap"><div class="page-h" style="display:flex;justify-content:space-between;align-items:end;flex-wrap:wrap;gap:12px"><h1>Dashboard</h1>
+<a class="btn ghost" href="/download/log">Download log (CSV)</a></div>
+<div class="kpis" id="perf"></div><div class="kpis" id="risk"></div>
+<div class="charts"><div class="card"><h3>Risk level distribution</h3><div class="chartbox"><canvas id="c1"></canvas></div></div>
+<div class="card"><h3>Probability over time</h3><div class="chartbox"><canvas id="c2"></canvas></div></div>
+<div class="card"><h3>Feature importance</h3><div class="chartbox"><canvas id="c3"></canvas></div></div>
+<div class="card"><h3>Rainfall vs probability</h3><div class="chartbox"><canvas id="c4"></canvas></div></div></div>
+<div class="card tbl" style="margin-bottom:70px"><h3>Prediction history</h3><div id="tbl"></div></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const C={Low:'#5bbf8a',Medium:'#e6c84f',High:'#e67e3c',Critical:'#e5484d'},tick=getComputedStyle(document.body).color;
+Chart.defaults.color=tick;Chart.defaults.borderColor='rgba(128,150,150,.2)';Chart.defaults.animation.duration=1200;
+fetch('/api/dashboard').then(r=>r.json()).then(d=>{
+const L={test_accuracy:'Accuracy',test_precision:'Precision',test_recall:'Recall',test_f1_score:'F1 score',best_cv_accuracy:'CV accuracy'};
+perf.innerHTML=Object.keys(L).map(k=>`<div class="kpi"><span>${L[k]}</span><b>${d.perf[k].toFixed(2)}%</b></div>`).join('');
+risk.innerHTML=`<div class="kpi"><span>Total checks</span><b>${d.total}</b></div>`+Object.keys(C).map(k=>`<div class="kpi" style="border-top:3px solid ${C[k]}"><span>${k}</span><b>${d.counts[k]}</b></div>`).join('');
+new Chart(c3,{type:'bar',data:{labels:d.features,datasets:[{data:d.importance,backgroundColor:'#e3a857'}]},options:{indexAxis:'y',plugins:{legend:{display:false}},maintainAspectRatio:false}});
+new Chart(c1,{type:'doughnut',data:{labels:Object.keys(d.counts),datasets:[{data:Object.values(d.counts),backgroundColor:Object.values(C),borderWidth:0}]},options:{cutout:'62%',maintainAspectRatio:false}});
+if(!d.rows.length){tbl.innerHTML='<div class="empty">No checks yet. <a href="/predict" style="color:var(--amber)">Run your first risk check</a>.</div>';return}
+const R=d.rows;
+new Chart(c2,{type:'line',data:{labels:R.map(r=>r.Timestamp.slice(5,16)),datasets:[{label:'Probability %',data:R.map(r=>r.Probability*100),borderColor:'#e3a857',tension:.3,pointBackgroundColor:R.map(r=>C[r.Risk_Level])}]},options:{plugins:{legend:{display:false}},maintainAspectRatio:false,scales:{y:{min:0,max:100}}}});
+new Chart(c4,{type:'scatter',data:{datasets:[{data:R.map(r=>({x:r.Rainfall_Intensity_mm,y:r.Probability*100})),backgroundColor:R.map(r=>C[r.Risk_Level]),pointRadius:6}]},options:{plugins:{legend:{display:false}},maintainAspectRatio:false,scales:{x:{title:{display:true,text:'Rainfall (mm)'}},y:{title:{display:true,text:'Probability %'}}}}});
+tbl.innerHTML='<table><tr><th>Time</th><th>Location</th><th>Rain</th><th>Slope</th><th>Movement</th><th>Probability</th><th>Risk</th><th>Telegram</th></tr>'+
+R.slice().reverse().map(r=>`<tr><td>${r.Timestamp}</td><td>${r.Location}</td><td>${r.Rainfall_Intensity_mm}</td><td>${r.Slope_Angle_degree}</td><td>${r.Ground_Movement_mm_per_day}</td><td>${(r.Probability*100).toFixed(1)}%</td><td><span class="tag" style="background:${C[r.Risk_Level]}">${r.Risk_Level}</span></td><td>${r.Telegram_Sent}</td></tr>`).join('')+'</table>'});
+</script>{% endblock %}

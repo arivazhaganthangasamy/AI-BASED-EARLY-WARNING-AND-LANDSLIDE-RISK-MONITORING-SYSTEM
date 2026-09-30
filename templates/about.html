@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}About{% endblock %}{% block body %}
+<div class="wrap"><div class="page-h"><h1>About the system</h1>
+<p class="muted" style="max-width:62ch;margin-top:12px">Landslides often follow heavy rain and saturated soil, and warning signs appear hours or days earlier. This project turns field readings into an early warning that people can act on.</p></div>
+<section class="blk" style="padding-top:20px"><h2>How it works</h2>
+<ol class="steps"><li><b>Enter site readings</b><span class="muted">Rainfall, soil moisture, slope angle, ground movement, temperature, groundwater level and landslide history.</span></li>
+<li><b>The model estimates probability</b><span class="muted">An optimized Random Forest returns the chance of a landslide.</span></li>
+<li><b>Risk is classified</b><span class="muted">Low, Medium, High or Critical, using thresholds saved with the model.</span></li>
+<li><b>People are warned</b><span class="muted">An alarm sounds in the browser and a Telegram message goes to the response team.</span></li>
+<li><b>Results are logged</b><span class="muted">Each check is stored and shown on the dashboard, with a CSV download.</span></li></ol>
+<div class="grid"><div class="card"><h3>Technology</h3><p class="muted">Python, Flask, scikit-learn Random Forest, Telegram Bot API, Chart.js.</p></div>
+<div class="card"><h3>Site photos</h3><p class="muted">Photos are saved with the record for reference. The model predicts from the seven numeric readings, not from image pixels.</p></div>
+<div class="card"><h3>Limits</h3><p class="muted">This tool supports decisions and does not replace expert geotechnical assessment or official warnings.</p></div></div></section></div>
+{% endblock %}

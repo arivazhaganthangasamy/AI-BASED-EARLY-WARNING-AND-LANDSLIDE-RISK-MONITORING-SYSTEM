@@ -1,0 +1,13 @@
+Timestamp,Location,Rainfall_Intensity_mm,Soil_Moisture_percent,Slope_Angle_degree,Ground_Movement_mm_per_day,Temperature_C,Groundwater_Level_m,Historical_Landslide,Probability,Risk_Level,SMS_Sent,Image
+2026-09-30 11:13:35,"Vellore, Tamil Nadu",120.0,60.0,35.0,5.0,28.0,8.0,0,0.9184346801261369,Critical,Failed,
+2026-09-30 11:15:02,"Vellore, Tamil Nadu",120.0,60.0,35.0,5.0,28.0,8.0,0,0.9184346801261369,Critical,Failed,
+2026-09-30 11:16:31,"Vellore, Tamil Nadu",44.25,12.6,38.87,3.687,22.92,6.45,0,0.282478368437523,Medium,Failed,
+2026-09-30 11:20:14,"Vellore, Tamil Nadu",120.0,60.0,35.0,5.0,28.0,8.0,0,0.9184346801261368,Critical,Failed,
+2026-09-30 11:23:04,"Vellore, Tamil Nadu",120.0,60.0,35.0,5.0,28.0,8.0,0,0.9184346801261369,Critical,Failed,
+2026-09-30 11:41:01,"Vellore, Tamil Nadu",120.0,60.0,35.0,5.0,28.0,8.0,0,0.9184346801261368,Critical,Failed,
+2026-09-30 12:35:43,"Vellore, Tamil Nadu",120.0,60.0,35.0,5.0,28.0,8.0,0,0.9184346801261369,Critical,Failed,
+2026-09-30 12:59:14,"Vellore, Tamil Nadu",120.0,60.0,35.0,5.0,28.0,8.0,0,0.9184346801261369,Critical,Yes,
+2026-09-30 13:07:03,"Vellore, Tamil Nadu",120.0,60.0,35.0,5.0,28.0,8.0,0,0.9184346801261369,Critical,Failed,
+2026-09-30 13:11:56,"Vellore, Tamil Nadu",120.0,60.0,35.0,5.0,28.0,8.0,0,0.9184346801261369,Critical,Failed,
+2026-09-30 13:14:22,"Vellore, Tamil Nadu",120.0,60.0,35.0,5.0,28.0,8.0,0,0.9184346801261369,Critical,Yes,
+2026-09-30 13:56:24,"Vellore, Tamil Nadu",120.0,60.0,35.0,5.0,28.0,8.0,0,0.9184346801261369,Critical,Yes,

@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}{% endblock %} | Landslide Early Warning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head><body>
+<nav><div class="wrap"><a class="brand" href="/"><i></i>Landslide EWS</a>
+<ul>{% for p,n in [('home','Home'),('about','About'),('predict_page','Check risk'),('dashboard','Dashboard')] %}
+<li><a class="l {{ 'on' if request.endpoint==p }}" href="{{ url_for(p) }}">{{ n }}</a></li>{% endfor %}</ul></div></nav>
+{% block body %}{% endblock %}
+<footer><div class="wrap">AI-Based Early Warning and Landslide Risk Monitoring System · Random Forest + Telegram alerts</div></footer>
+</body></html>
